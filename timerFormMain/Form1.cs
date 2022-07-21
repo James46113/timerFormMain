@@ -14,6 +14,7 @@ namespace timerFormMain
     {
         int countdown = 0;
         int original = 1;
+        bool countdownEnabled = true;
 
         public Form1()
         {
@@ -57,7 +58,7 @@ namespace timerFormMain
 
         private void startStopFunc()
         {
-            if (countdown > 0)
+            if (countdown > 0 && countdownEnabled)
             {
                 if (timer1.Enabled)
                 {
@@ -71,19 +72,34 @@ namespace timerFormMain
                     original = countdown;
                 }
             }
+            else
+            {
+                if (timer1.Enabled)
+                {
+                    timer1.Enabled = false;
+                    stopStart.Text = "▶ Start";
+                }
+                else
+                {
+                    timer1.Enabled = true;
+                    stopStart.Text = "■ Stop";
+                }
+            }
         }
 
         private void updateTimer()
         {
-            countdown -= 1;
-
-            timerBox.Text = (countdown / 100 / 60).ToString("00") + ":" + (countdown / 100 % 60).ToString("00");
+            if (countdownEnabled) countdown -= 1;
+            else countdown += 1;
+            
+            if (countdownEnabled) timerBox.Text = (countdown / 10 / 60).ToString("00") + ":" + (countdown / 10 % 60).ToString("00");
+            else timerBox.Text = (countdown / 10 / 60).ToString("00") + ":" + (countdown / 10 % 60).ToString("00") + "." + (countdown % 10);
             if (countdown == 0f)
             {
                 timer1.Enabled = false;
                 stopStart.Text = "▶ Start";
             }
-            //Console.WriteLine((countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00"));
+            Console.WriteLine((countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00"));
             Refresh();
         }
 
@@ -93,9 +109,9 @@ namespace timerFormMain
             int amount;
             if (sender == add30secs) amount = 30;
             else amount = Convert.ToInt32(sender.Text.Replace(" secs", "").Replace(" mins", "").Replace(" min", "").Replace("+", ""))*60;
-            countdown += amount*100;
-            timerBox.Text = (countdown / 6000).ToString("00") + ":" + (countdown /100 % 60).ToString("00");
-            original += amount*100;
+            countdown += amount*10;
+            timerBox.Text = (countdown / 6000).ToString("00") + ":" + (countdown /10 % 60).ToString("00");
+            original += amount*10;
         }
 
         private void resetTimer()
@@ -131,6 +147,28 @@ namespace timerFormMain
             if (countdown == 0) e.Graphics.DrawArc(new Pen(Color.Black, 5), new Rectangle(25, 25, 150, 150), 0, 360);
             Console.WriteLine(360 * ((float)countdown / (float)original));
             e.Graphics.DrawArc(new Pen(Color.Black, 5), new Rectangle(25, 25, 150, 150), -90, 360 * ((float)countdown / (float)original));// Console.WriteLine(360 * (countdown / original)); }
+        }
+
+        private void switchMode_Click(object sender, EventArgs e)
+        {
+            if (countdownEnabled)
+            {
+                countdownEnabled = false;
+                add1min.Enabled = false;
+                add30secs.Enabled = false;
+                add3mins.Enabled = false;
+                add5mins.Enabled = false;
+                pictureBox1.Hide();
+            }
+            else
+            {
+                countdownEnabled = true;
+                add1min.Enabled = true;
+                add30secs.Enabled = true;
+                add3mins.Enabled = true;
+                add5mins.Enabled = true;
+                pictureBox1.Show();
+            }
         }
     }
 }

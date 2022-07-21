@@ -38,6 +38,7 @@
             this.timerBox = new System.Windows.Forms.TextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.switchMode = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,7 +112,6 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // pictureBox1
@@ -123,11 +123,22 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             // 
+            // switchMode
+            // 
+            this.switchMode.Location = new System.Drawing.Point(656, 126);
+            this.switchMode.Name = "switchMode";
+            this.switchMode.Size = new System.Drawing.Size(75, 23);
+            this.switchMode.TabIndex = 8;
+            this.switchMode.Text = "Switch";
+            this.switchMode.UseVisualStyleBackColor = true;
+            this.switchMode.Click += new System.EventHandler(this.switchMode_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.switchMode);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.timerBox);
             this.Controls.Add(this.reset);
@@ -155,6 +166,7 @@
         private System.Windows.Forms.TextBox timerBox;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button switchMode;
     }
 }
 
