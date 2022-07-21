@@ -13,6 +13,7 @@ namespace timerFormMain
     public partial class Form1 : Form
     {
         int countdown = 0;
+        int original = 1;
 
         public Form1()
         {
@@ -67,6 +68,7 @@ namespace timerFormMain
                 {
                     timer1.Enabled = true;
                     stopStart.Text = "■ Stop";
+                    original = countdown;
                 }
             }
         }
@@ -75,13 +77,14 @@ namespace timerFormMain
         {
             countdown -= 1;
 
-            timerBox.Text = (countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00");
+            timerBox.Text = (countdown / 100 / 60).ToString("00") + ":" + (countdown / 100 % 60).ToString("00");
             if (countdown == 0f)
             {
                 timer1.Enabled = false;
                 stopStart.Text = "▶ Start";
             }
-            Console.WriteLine((countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00"));
+            //Console.WriteLine((countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00"));
+            Refresh();
         }
 
 
@@ -90,8 +93,9 @@ namespace timerFormMain
             int amount;
             if (sender == add30secs) amount = 30;
             else amount = Convert.ToInt32(sender.Text.Replace(" secs", "").Replace(" mins", "").Replace(" min", "").Replace("+", ""))*60;
-            countdown += amount;
-            timerBox.Text = (countdown / 60).ToString("00") + ":" + (countdown % 60).ToString("00");
+            countdown += amount*100;
+            timerBox.Text = (countdown / 6000).ToString("00") + ":" + (countdown /100 % 60).ToString("00");
+            original += amount*100;
         }
 
         private void resetTimer()
@@ -100,6 +104,7 @@ namespace timerFormMain
             countdown = 0;
             timerBox.Text = "00:00";
             stopStart.Text = "▶ Start";
+            Refresh();
         }
 
         private void timerBox_KeyDown(object sender, KeyEventArgs e)
@@ -111,9 +116,21 @@ namespace timerFormMain
         {
             if (e.KeyCode == Keys.Enter)
             {
-                try { countdown = Convert.ToInt32(timerBox.Text) * 60; startStopFunc(); }
+                try { countdown = Convert.ToInt32(timerBox.Text) * 6000; startStopFunc(); }
                 catch { }
             }
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            drawCircle(e);
+        }
+
+        private void drawCircle(PaintEventArgs e)
+        {
+            if (countdown == 0) e.Graphics.DrawArc(new Pen(Color.Black, 5), new Rectangle(25, 25, 150, 150), 0, 360);
+            Console.WriteLine(360 * ((float)countdown / (float)original));
+            e.Graphics.DrawArc(new Pen(Color.Black, 5), new Rectangle(25, 25, 150, 150), -90, 360 * ((float)countdown / (float)original));// Console.WriteLine(360 * (countdown / original)); }
         }
     }
 }
